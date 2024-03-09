@@ -31,7 +31,7 @@ export default {
     },
     path: {
         root: path.resolve(),
-        assets: path.resolve("./public/assets")
+        assets: path.resolve("./dist/assets")
     },
     openapikey: {
         jejucits: cast('OPENAPIKEY_JEJUCITS', 'number', null)
