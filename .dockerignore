@@ -1,0 +1,7 @@
+build/
+docker-bind/
+logs/
+logs/
+node_modules/
+.git/
+.dockerignore
