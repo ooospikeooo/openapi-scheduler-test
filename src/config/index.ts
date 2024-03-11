@@ -26,6 +26,7 @@ export default {
     logs: {
         dir: cast('LOGDIR', 'string', 'logs')
     },
+    dataInterfaceIpAddress: cast('DATAINTERFACE_IPADDRESS', 'string', undefined),
     api: {
         prefix: '/api',
     },
@@ -33,7 +34,16 @@ export default {
         root: path.resolve(),
         assets: path.resolve("./dist/assets")
     },
-    openapikey: {
-        jejucits: cast('OPENAPIKEY_JEJUCITS', 'number', null)
+    openapi: {
+        url: 'http://api.jejuits.go.kr/api/infoParkingStateList',
+        keys: {
+            jejucits: cast('OPENAPIKEY_JEJUCITS', 'number', undefined)
+        }
+    },
+    cron: {
+        initialPattern: cast('CRON_INITIAL_PATTERN', 'string', undefined)
+    },
+    avro: {
+        schemaPath: cast('AVRO_SCHEMA_FILE', 'string', 'ParkingLotStatus.avsc')
     }
 };

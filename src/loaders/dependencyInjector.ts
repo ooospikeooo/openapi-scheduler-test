@@ -1,24 +1,57 @@
 import { Container } from 'typedi';
-import LoggerInstance from './logger';
-import { CronHandler } from '@/services/cronhandler';
 import axios from 'axios';
-import { setTimeout } from "timers/promises";
+import avro from 'avsc';
+
+import LoggerInstance from './logger';
 import config from '@/config';
+import { CronHandler } from '@/services/cronhandler';
+import { AvroSchemaParkingLotStatus } from '@/services/avroschemaparkinglotstatus';
+import { getDataTime } from '@/utils/time';
 
 export default () => {
     try {
-        const cronhandlerInstance = new CronHandler('*/10 * * * * *', async () => {
+        Container.set('logger', LoggerInstance);
+
+        const avroSchemaParkingLotStatusInstance = new AvroSchemaParkingLotStatus(config.avro.schemaPath)
+        Container.set('avroSchemaParkingLotStatus', avroSchemaParkingLotStatusInstance);
+
+        const cronhandlerInstance = new CronHandler(config.cron.initialPattern, async () => {
+            let data_time = getDataTime(new Date());
+
             LoggerInstance.info('cron job is called ');
 
-            const apiKey = config.openapikey.jejucits;
-            const apiUrl = `http://api.jejuits.go.kr/api/infoParkingStateList`;
+            const apiKey = config.openapi.keys.jejucits;
+            const apiUrl = config.openapi.url;
             const response = await axios.get(apiUrl, { params: { code: apiKey } });
 
-            LoggerInstance.info(JSON.stringify(response.data));
+            // LoggerInstance.info(JSON.stringify(response.data));
+
+            const schema: AvroSchemaParkingLotStatus = Container.get('avroSchemaParkingLotStatus');
+            let encoder = new avro.streams.BlockEncoder(schema.getSchema());
+
+            response.data.info.forEach((item: any) => {
+                item.id = Number(item.id);
+                item.date_time = data_time;
+                encoder.write(item);
+            });
+            encoder.end();
+
+            const buff = [];
+            for await (let chunk of encoder) {
+                buff.push(chunk);
+            }
+
+            const binaryData = Buffer.concat(buff);
+
+            axios.post(config.dataInterfaceIpAddress,
+                {
+                    avro: Buffer.from(binaryData).toString('base64')
+                }).then((res) => {
+                    console.log(res.data);
+                })
         });
 
         Container.set('cronHandler', cronhandlerInstance);
-        Container.set('logger', LoggerInstance);
     } catch (e) {
         LoggerInstance.error('🔥 Error on dependency injector loader: %o', e);
         throw e;
