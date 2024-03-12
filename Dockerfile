@@ -1,6 +1,14 @@
+
+# ARG BUILDENV
+# ARG WORKDIR
+
 FROM node:20.11.1-alpine
 
+# ARG BUILDENV
+# ENV BUILDENV ${BUILDENV}
+
 ARG WORKDIR
+ENV WORKDIR ${WORKDIR}
 WORKDIR ${WORKDIR}
 COPY . ./
 
@@ -13,7 +21,10 @@ RUN npm install
 
 RUN npm i -g pm2
 
+RUN pm2 install pm2-logrotate
+
 RUN npm run build 
+
 
 # EXPOSE 4000
 

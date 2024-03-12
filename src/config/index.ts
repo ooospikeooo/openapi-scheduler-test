@@ -6,11 +6,11 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 let envFound;
 if (process.env.NODE_ENV === 'production') {
-    envFound = dotenv.config({ path: path.join(__dirname, '../../env/.env.production') })
+    envFound = dotenv.config({ path: path.join(__dirname, '../../env/.env.production'), debug:  true })
 } else if (process.env.NODE_ENV === 'development') {
-    envFound = dotenv.config({ path: path.join(__dirname, '../../env/.env.development') })
+    envFound = dotenv.config({ path: path.join(__dirname, '../../env/.env.development'), debug:  true })
 } else {
-    throw new Error('process.env.NODE_ENV를 설정하지 않았습니다!')
+    throw new Error(`process.env.NODE_ENV 값이 유효하지 않습니다 : ${process.env.NODE_ENV}`)
 }
 
 if (envFound.error) {

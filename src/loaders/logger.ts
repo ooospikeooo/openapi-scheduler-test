@@ -19,30 +19,30 @@ const logFormat = printf(info => {
 const LoggerInstance = winston.createLogger({
     format: combine(
         errors({stack: true}),
-        timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss a',
-        }),
+        // timestamp({
+        //     format: 'YYYY-MM-DD HH:mm:ss a',
+        // }),
         logFormat,
     ),
     transports: [
-        // info 레벨 로그를 저장할 파일 설정
-        new winstonDaily({
-            level: 'info',
-            datePattern: 'YYYY-MM-DD',
-            dirname: logDir,
-            filename: `%DATE%.log`,
-            maxFiles: 30,  // 30일치 로그 파일 저장
-            zippedArchive: true,
-        }),
-        // error 레벨 로그를 저장할 파일 설정
-        new winstonDaily({
-            level: 'error',
-            datePattern: 'YYYY-MM-DD',
-            dirname: logDir + '/error',  // error.log 파일은 /logs/error 하위에 저장
-            filename: `%DATE%.error.log`,
-            maxFiles: 30,
-            zippedArchive: true,
-        }),
+        // // info 레벨 로그를 저장할 파일 설정
+        // new winstonDaily({
+        //     level: 'info',
+        //     datePattern: 'YYYY-MM-DD',
+        //     dirname: logDir,
+        //     filename: `%DATE%.log`,
+        //     maxFiles: 30,  // 30일치 로그 파일 저장
+        //     zippedArchive: true,
+        // }),
+        // // error 레벨 로그를 저장할 파일 설정
+        // new winstonDaily({
+        //     level: 'error',
+        //     datePattern: 'YYYY-MM-DD',
+        //     dirname: logDir + '/error',  // error.log 파일은 /logs/error 하위에 저장
+        //     filename: `%DATE%.error.log`,
+        //     maxFiles: 30,
+        //     zippedArchive: true,
+        // }),
         // Console로 출력
         new winston.transports.Console({
             level: 'http',

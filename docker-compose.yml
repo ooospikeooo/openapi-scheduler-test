@@ -7,12 +7,14 @@ services:
       context: .
       args:
       - WORKDIR=${WORKDIR}
+      # - BUILDENV=${BUILDENV}
     ports:
       - "4000:4000"
     volumes:
       - "./docker-bind/logs:${WORKDIR}/logs"
     environment:
       - TZ = "Asia/Seoul"
+      - BUILDENV=${BUILDENV}
     # env_file:
     #   - path: .docker.env
     #     required: true

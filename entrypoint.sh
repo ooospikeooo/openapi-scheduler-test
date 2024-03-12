@@ -1,3 +1,6 @@
 #!/bin/sh
 ls -al
-npm run prod.pm2
+echo 
+echo "BUILDENV: ${BUILDENV}"
+echo "WORKDIR: ${WORKDIR}"
+npm run prod.pm2.runtime

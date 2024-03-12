@@ -27,6 +27,18 @@ export default (app: Router) => {
         cronHandler.setCronPattern(time);
         res.send("cron time change.");
     })
+
+    route.post('/change-pattern', function (req, res) {
+        const Logger: Logger = Container.get('logger');
+        if(req.body.pattern==null){
+            throw new Error("cron pattern parameter is null.");
+        }
+
+        const cronHandler: CronHandler = Container.get('cronHandler');
+        cronHandler.setCronPattern(req.body.pattern);
+        console.log(req.body);
+        res.send("change-pattern called.");
+    })
     
     route.get('/time', function (req, res) {
         const Logger: Logger = Container.get('logger');
