@@ -12,6 +12,7 @@ module.exports = {
     },
     out_file: `${process.env.LOGDIR}/out.log`,
     error_file: `${process.env.LOGDIR}/error.log`,
+    log_file: `${process.env.LOGDIR}/combined.log`,
     // out_file: `logs/out.log`,
     // error_file: `logs/error.log`,
     time: true,
