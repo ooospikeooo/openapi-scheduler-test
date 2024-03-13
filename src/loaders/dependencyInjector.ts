@@ -43,12 +43,16 @@ export default () => {
 
             const binaryData = Buffer.concat(buff);
 
+            LoggerInstance.info('before avro send. ');
+
             axios.post(config.dataInterfaceIpAddress,
                 {
                     avro: Buffer.from(binaryData).toString('base64')
                 }).then((res) => {
-                    console.log(res.data);
-                })
+                    LoggerInstance.info(res.data);
+                }).catch(error => {
+                    LoggerInstance.error(error.response, error);
+                });
         });
 
         Container.set('cronHandler', cronhandlerInstance);
