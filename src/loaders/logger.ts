@@ -8,8 +8,9 @@ const { combine, timestamp, errors, printf } = winston.format;
 // Define log format
 const logFormat = printf(info => {
     if(info.stack==null)
-        return `${info.timestamp} | ${info.level} | ${info.message}`;
-    return `${info.timestamp} | ${info.level} | ${info.message} | ${info.stack}`;
+        return `${info.level} | ${info.message}`;
+    // return `${info.timestamp} | ${info.level} | ${info.message} | ${info.stack}`;
+    return `${info.level} | ${info.message} | ${info.stack}`;
 });
 
 /*
@@ -46,10 +47,11 @@ const LoggerInstance = winston.createLogger({
         // Console로 출력
         new winston.transports.Console({
             level: 'http',
-            format: winston.format.combine(
-                winston.format.colorize(),  // 색깔 넣어서 출력
-                logFormat, 
-            )})
+            // format: winston.format.combine(
+            //     winston.format.colorize(),  // 색깔 넣어서 출력
+            //     logFormat, 
+            // )
+        })
     ],
 });
 
